@@ -11,7 +11,17 @@ echo.
 echo   Running 14 test groups across all classes and edge cases...
 echo.
 
-RunTests.exe
+if not exist "RunTests.exe" (
+    echo [INFO] RunTests.exe not found. Compiling first...
+    call run_tests.bat
+    if not exist "RunTests.exe" (
+        echo [ERROR] Could not build RunTests.exe. Please ensure g++ is installed.
+        pause
+        exit /b 1
+    )
+) else (
+    RunTests.exe
+)
 
 echo.
 echo ==============================================================================

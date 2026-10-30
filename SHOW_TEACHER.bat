@@ -25,6 +25,16 @@ echo   Press any key to start the interactive C++ Application...
 echo ==============================================================================
 pause >nul
 
+if not exist "BankTokenSystem.exe" (
+    echo [INFO] Executable not found. Compiling first using build.bat...
+    call build.bat
+    if not exist "BankTokenSystem.exe" (
+        echo [ERROR] Could not build BankTokenSystem.exe. Please ensure g++ is installed.
+        pause
+        exit /b 1
+    )
+)
+
 BankTokenSystem.exe --demo
 
 echo.
