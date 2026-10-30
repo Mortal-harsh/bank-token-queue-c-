@@ -1,0 +1,30 @@
+# Compiled binaries
+*.exe
+*.o
+*.obj
+*.out
+
+# Build artifacts
+build/
+bin/
+out/
+
+# Data files (runtime generated)
+data/counters.dat
+data/meta.dat
+data/queues.dat
+data/tokens.dat
+
+# Reports (runtime generated)
+reports/*.csv
+
+# IDE / OS files
+.vscode/
+.vs/
+*.user
+*.suo
+.DS_Store
+Thumbs.db
+
+# Dependency locks
+*.lock

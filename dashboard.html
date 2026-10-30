@@ -1,0 +1,1415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bank Token Management System — Smart Lounge Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
+    <!-- QR Code Generator Library (Lightweight CDN) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <style>
+        :root {
+            --bg-primary: #0a0e17;
+            --bg-secondary: #121826;
+            --bg-card: rgba(26, 34, 53, 0.75);
+            --bg-card-hover: rgba(34, 45, 70, 0.9);
+            --border: rgba(255, 255, 255, 0.08);
+            --border-glow: rgba(56, 189, 248, 0.4);
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --accent-blue: #38bdf8;
+            --accent-indigo: #6366f1;
+            --accent-green: #10b981;
+            --accent-yellow: #f59e0b;
+            --accent-purple: #a855f7;
+            --accent-red: #ef4444;
+            --radius-lg: 16px;
+            --radius-md: 12px;
+            --radius-sm: 8px;
+            --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            background-image: 
+                radial-gradient(circle at 10% 10%, rgba(56, 189, 248, 0.09) 0%, transparent 40%),
+                radial-gradient(circle at 90% 90%, rgba(99, 102, 241, 0.09) 0%, transparent 40%);
+            padding: 24px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Top Header */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 28px;
+            background: var(--bg-card);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            margin-bottom: 24px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .brand-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-indigo));
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            box-shadow: 0 4px 16px rgba(56, 189, 248, 0.4);
+        }
+
+        .brand-text h1 {
+            font-size: 22px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            background: linear-gradient(120deg, #fff, #94a3b8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .brand-text p {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .badge-live {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 14px;
+            border-radius: 9999px;
+            background: rgba(16, 185, 129, 0.12);
+            color: var(--accent-green);
+            font-size: 13px;
+            font-weight: 700;
+            border: 1px solid rgba(16, 185, 129, 0.25);
+        }
+
+        .badge-live::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--accent-green);
+            box-shadow: 0 0 10px var(--accent-green);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(0.85); }
+        }
+
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, #0284c7, #6366f1);
+            color: #fff;
+            padding: 10px 18px;
+            border-radius: var(--radius-md);
+            border: none;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 4px 16px rgba(56, 189, 248, 0.35);
+            transition: var(--transition);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(56, 189, 248, 0.5);
+        }
+
+        .btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255, 255, 255, 0.06);
+            color: var(--text-secondary);
+            padding: 10px 14px;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border);
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.12);
+            color: #fff;
+        }
+
+        .btn-voice {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(168, 85, 247, 0.12);
+            color: #d8b4fe;
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            padding: 10px 14px;
+            border-radius: var(--radius-md);
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .btn-voice:hover {
+            background: rgba(168, 85, 247, 0.25);
+        }
+
+        /* Announcement Ticker Bar */
+        .announcement-bar {
+            background: linear-gradient(90deg, rgba(56, 189, 248, 0.15), rgba(99, 102, 241, 0.15));
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            border-radius: var(--radius-md);
+            padding: 12px 20px;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+        }
+
+        .ticker-content {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #e0f2fe;
+        }
+
+        .ticker-badge {
+            background: #0284c7;
+            color: #fff;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+        }
+
+        /* KPI Cards */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+            gap: 18px;
+            margin-bottom: 24px;
+        }
+
+        .kpi-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .kpi-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--border-glow);
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.4);
+        }
+
+        .kpi-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--card-color, var(--accent-blue));
+        }
+
+        .kpi-title {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .kpi-value {
+            font-size: 34px;
+            font-weight: 800;
+            letter-spacing: -1px;
+            color: #fff;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .kpi-desc {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 6px;
+        }
+
+        /* Main Dashboard Layout */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 340px;
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+
+        @media (max-width: 1024px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Cards & Panels */
+        .panel {
+            background: var(--bg-card);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+        }
+
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .panel-title {
+            font-size: 18px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Counters Grid */
+        .counters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .counter-box {
+            background: rgba(18, 24, 38, 0.85);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 18px;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .counter-box.busy {
+            border-color: rgba(56, 189, 248, 0.5);
+            background: rgba(14, 165, 233, 0.08);
+            box-shadow: 0 4px 18px rgba(56, 189, 248, 0.12);
+        }
+
+        .counter-box-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .counter-number {
+            font-weight: 700;
+            font-size: 15px;
+            color: #fff;
+        }
+
+        .counter-status {
+            font-size: 11px;
+            font-weight: 800;
+            padding: 4px 10px;
+            border-radius: 9999px;
+            text-transform: uppercase;
+        }
+
+        .counter-status.busy {
+            background: rgba(56, 189, 248, 0.15);
+            color: var(--accent-blue);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+        }
+
+        .counter-status.free {
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--accent-green);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .counter-service {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+        }
+
+        .counter-details {
+            margin-bottom: 14px;
+            min-height: 42px;
+        }
+
+        .counter-serving-token {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--accent-blue);
+            padding: 6px 10px;
+            background: rgba(0, 0, 0, 0.35);
+            border-radius: var(--radius-sm);
+            display: inline-block;
+        }
+
+        .counter-btn {
+            width: 100%;
+            padding: 9px 12px;
+            border-radius: var(--radius-sm);
+            font-size: 12px;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .counter-btn.call-btn {
+            background: rgba(56, 189, 248, 0.15);
+            color: var(--accent-blue);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+        }
+
+        .counter-btn.call-btn:hover {
+            background: var(--accent-blue);
+            color: #000;
+        }
+
+        .counter-btn.complete-btn {
+            background: rgba(16, 185, 129, 0.18);
+            color: var(--accent-green);
+            border: 1px solid rgba(16, 185, 129, 0.35);
+        }
+
+        .counter-btn.complete-btn:hover {
+            background: var(--accent-green);
+            color: #000;
+        }
+
+        /* Search & Table */
+        .search-bar {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .search-input {
+            flex: 1;
+            min-width: 240px;
+            background: rgba(0, 0, 0, 0.35);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 10px 16px;
+            color: #fff;
+            font-size: 14px;
+            font-family: inherit;
+            outline: none;
+            transition: var(--transition);
+        }
+
+        .search-input:focus {
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
+        }
+
+        .filter-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            padding: 8px 14px;
+            border-radius: var(--radius-sm);
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .filter-btn.active, .filter-btn:hover {
+            background: var(--accent-blue);
+            color: #000;
+            border-color: var(--accent-blue);
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+            max-height: 480px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 14px;
+        }
+
+        th {
+            background: rgba(18, 24, 38, 0.95);
+            padding: 14px 18px;
+            color: var(--text-secondary);
+            font-weight: 700;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        td {
+            padding: 14px 18px;
+            border-top: 1px solid var(--border);
+            color: #cbd5e1;
+        }
+
+        tr:hover td {
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .token-badge {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700;
+            color: var(--accent-blue);
+        }
+
+        .status-pill {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 9999px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .status-pill.Waiting { background: rgba(245, 158, 11, 0.15); color: var(--accent-yellow); border: 1px solid rgba(245, 158, 11, 0.3); }
+        .status-pill.Serving { background: rgba(56, 189, 248, 0.15); color: var(--accent-blue); border: 1px solid rgba(56, 189, 248, 0.3); }
+        .status-pill.Served  { background: rgba(16, 185, 129, 0.15); color: var(--accent-green); border: 1px solid rgba(16, 185, 129, 0.3); }
+
+        .priority-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 700;
+            background: rgba(168, 85, 247, 0.2);
+            color: var(--accent-purple);
+            border: 1px solid rgba(168, 85, 247, 0.35);
+        }
+
+        /* Queue List */
+        .queue-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 14px;
+            background: rgba(0, 0, 0, 0.25);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            margin-bottom: 10px;
+        }
+
+        .queue-item-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .queue-pos {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700;
+            color: var(--text-muted);
+            width: 24px;
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: var(--transition);
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .modal-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-glow);
+            border-radius: var(--radius-lg);
+            width: 90%;
+            max-width: 480px;
+            padding: 28px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+            transform: scale(0.9);
+            transition: var(--transition);
+        }
+
+        .modal-overlay.active .modal-card {
+            transform: scale(1);
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .modal-desc {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 6px;
+        }
+
+        .form-input, .form-select {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 10px 14px;
+            color: #fff;
+            font-size: 14px;
+            font-family: inherit;
+            outline: none;
+            transition: var(--transition);
+        }
+
+        .form-input:focus, .form-select:focus {
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.2);
+        }
+
+        .toggle-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 14px;
+            background: rgba(168, 85, 247, 0.08);
+            border: 1px solid rgba(168, 85, 247, 0.25);
+            border-radius: var(--radius-sm);
+            margin-bottom: 20px;
+        }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 48px;
+            height: 26px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(255, 255, 255, 0.15);
+            transition: .3s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .3s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: var(--accent-purple);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(22px);
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .modal-buttons button {
+            flex: 1;
+        }
+
+        /* Printable Receipt Slip */
+        .slip-card {
+            background: #fff;
+            color: #1e293b;
+            border-radius: var(--radius-md);
+            padding: 24px;
+            font-family: 'JetBrains Mono', monospace;
+            text-align: center;
+            border-top: 6px dashed #0284c7;
+            border-bottom: 6px dashed #0284c7;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .slip-header {
+            font-size: 14px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            margin-bottom: 4px;
+        }
+
+        .slip-sub {
+            font-size: 11px;
+            color: #64748b;
+            margin-bottom: 14px;
+        }
+
+        .slip-token-number {
+            font-size: 42px;
+            font-weight: 800;
+            color: #0284c7;
+            letter-spacing: -1px;
+            margin: 10px 0;
+            padding: 10px;
+            background: #f0f9ff;
+            border-radius: var(--radius-sm);
+        }
+
+        .slip-eta-box {
+            background: #fef3c7;
+            color: #92400e;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 700;
+            margin: 10px 0;
+            border: 1px solid #fde68a;
+        }
+
+        .slip-details {
+            font-size: 12px;
+            text-align: left;
+            margin: 14px 0;
+            border-top: 1px solid #e2e8f0;
+            border-bottom: 1px solid #e2e8f0;
+            padding: 10px 0;
+            line-height: 1.8;
+        }
+
+        .slip-priority-tag {
+            background: #f3e8ff;
+            color: #9333ea;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+        }
+
+        .qr-section {
+            margin: 12px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+        }
+
+        #slip-qrcode {
+            padding: 6px;
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+        }
+
+        .footer {
+            margin-top: 32px;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Top Header -->
+        <header>
+            <div class="brand">
+                <div class="brand-icon">🏦</div>
+                <div class="brand-text">
+                    <h1>Bank Token Management System</h1>
+                    <p>Live Multi-Counter Queue & Voice Announcement System</p>
+                </div>
+            </div>
+            <div class="header-actions">
+                <button class="btn-voice" id="voice-toggle-btn" onclick="toggleVoice()">
+                    <span id="voice-icon">🔊</span>
+                    <span id="voice-text">Voice: ON</span>
+                </button>
+                <button class="btn-primary" onclick="openTokenModal()">
+                    <span>🎟️</span>
+                    <span>Issue New Token</span>
+                </button>
+                <button class="btn-secondary" onclick="exportCSV()">
+                    <span>📥</span>
+                    <span>Export CSV</span>
+                </button>
+                <span class="badge-live">SYSTEM OPERATIONAL</span>
+            </div>
+        </header>
+
+        <!-- Live Announcement Ticker Bar -->
+        <div class="announcement-bar">
+            <div class="ticker-content">
+                <span class="ticker-badge">LIVE ANNOUNCEMENT</span>
+                <span id="live-announcement-text">Welcome to Central Bank. Please collect a token slip from the kiosk.</span>
+            </div>
+            <button class="btn-secondary" style="padding: 6px 12px; font-size: 12px;" onclick="replayLastAnnouncement()">
+                <span>🔁 Repeat Audio</span>
+            </button>
+        </div>
+
+        <!-- KPI Metrics -->
+        <div class="kpi-grid">
+            <div class="kpi-card" style="--card-color: var(--accent-blue);">
+                <div class="kpi-title">Total Tokens Issued</div>
+                <div class="kpi-value" id="kpi-issued">0</div>
+                <div class="kpi-desc">Across all services</div>
+            </div>
+            <div class="kpi-card" style="--card-color: var(--accent-yellow);">
+                <div class="kpi-title">Currently Waiting</div>
+                <div class="kpi-value" id="kpi-waiting">0</div>
+                <div class="kpi-desc">In FIFO & Priority queues</div>
+            </div>
+            <div class="kpi-card" style="--card-color: var(--accent-indigo);">
+                <div class="kpi-title">Currently Serving</div>
+                <div class="kpi-value" id="kpi-serving">0</div>
+                <div class="kpi-desc">Active at tellers</div>
+            </div>
+            <div class="kpi-card" style="--card-color: var(--accent-green);">
+                <div class="kpi-title">Successfully Served</div>
+                <div class="kpi-value" id="kpi-served">0</div>
+                <div class="kpi-desc">Completed transactions</div>
+            </div>
+            <div class="kpi-card" style="--card-color: var(--accent-purple);">
+                <div class="kpi-title">Active Counters</div>
+                <div class="kpi-value" id="kpi-counters">6</div>
+                <div class="kpi-desc">2 Deposit, 2 Withdraw, 1 Acct, 1 Loan</div>
+            </div>
+        </div>
+
+        <!-- Service Counters -->
+        <div class="panel" style="margin-bottom: 24px;">
+            <div class="panel-header">
+                <div class="panel-title">
+                    <span>🏢</span> Live Teller Counters
+                </div>
+                <span style="font-size: 13px; color: var(--text-muted);">Calling a customer triggers automatic voice announcement</span>
+            </div>
+            <div class="counters-grid" id="counters-container">
+                <!-- Injected via JavaScript -->
+            </div>
+        </div>
+
+        <!-- Main Content Grid -->
+        <div class="dashboard-grid">
+            <!-- Left: Tokens Table -->
+            <div class="panel">
+                <div class="panel-header">
+                    <div class="panel-title">
+                        <span>📋</span> Customer Tokens Registry
+                    </div>
+                </div>
+
+                <div class="search-bar">
+                    <input type="text" class="search-input" id="search-box" placeholder="🔍 Search by Token ID, Customer Name, Phone, or Status...">
+                    <button class="filter-btn active" onclick="filterService('All')">All</button>
+                    <button class="filter-btn" onclick="filterService('Deposit')">Deposit</button>
+                    <button class="filter-btn" onclick="filterService('Withdrawal')">Withdraw</button>
+                    <button class="filter-btn" onclick="filterService('Account Services')">Account</button>
+                    <button class="filter-btn" onclick="filterService('Loan')">Loan</button>
+                </div>
+
+                <div class="table-responsive">
+                    <table id="tokens-table">
+                        <thead>
+                            <tr>
+                                <th>Token ID</th>
+                                <th>Customer Name</th>
+                                <th>Phone</th>
+                                <th>Service</th>
+                                <th>Priority</th>
+                                <th>Status</th>
+                                <th>Issued At</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tokens-tbody">
+                            <!-- Injected via JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Right: Queue Depths -->
+            <div class="panel">
+                <div class="panel-header">
+                    <div class="panel-title">
+                        <span>⏳</span> Priority Queue Heads
+                    </div>
+                </div>
+                <div id="queue-heads-list">
+                    <!-- Injected via JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>Bank Token Management System • Mini Project on C++ • 2026</p>
+        </div>
+    </div>
+
+    <!-- Modal 1: Issue New Token Form -->
+    <div class="modal-overlay" id="token-modal">
+        <div class="modal-card">
+            <div class="modal-title">
+                <span>🎟️</span> Issue New Bank Token
+            </div>
+            <div class="modal-desc">Enter customer details to generate a unique queuing token slip.</div>
+
+            <form id="token-form" onsubmit="handleTokenSubmit(event)">
+                <div class="form-group">
+                    <label class="form-label">Customer Full Name *</label>
+                    <input type="text" class="form-input" id="input-name" placeholder="e.g. Hraj Singh" required autofocus>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Phone Number *</label>
+                    <input type="tel" class="form-input" id="input-phone" placeholder="e.g. 9876543210" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Select Bank Service *</label>
+                    <select class="form-select" id="input-service">
+                        <option value="Deposit">💵 Cash Deposit (~3 mins avg)</option>
+                        <option value="Withdrawal">💳 Cash Withdrawal (~2 mins avg)</option>
+                        <option value="Account Services">📑 Account Services (KYC / Passbook ~5 mins)</option>
+                        <option value="Loan">🏠 Loan & Credit Counseling (~10 mins)</option>
+                    </select>
+                </div>
+
+                <div class="toggle-container">
+                    <div>
+                        <div style="font-weight: 700; font-size: 13px; color: #fff;">Priority Customer</div>
+                        <div style="font-size: 11px; color: var(--text-secondary);">Senior Citizen / Specially-Abled (Jumps to queue front)</div>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="input-priority">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <div class="modal-buttons">
+                    <button type="button" class="btn-secondary" onclick="closeTokenModal()">Cancel</button>
+                    <button type="submit" class="btn-primary">Generate Token Slip</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal 2: Printable Token Receipt Slip with QR Code and ETA -->
+    <div class="modal-overlay" id="receipt-modal">
+        <div class="modal-card" style="max-width: 420px;">
+            <div class="slip-card">
+                <div class="slip-header">🏦 CENTRAL BANK OF INDIA</div>
+                <div class="slip-sub">Customer Queuing Receipt Slip</div>
+
+                <div class="slip-token-number" id="slip-token-id">TKN-0007</div>
+
+                <div id="slip-priority-container"></div>
+
+                <div class="slip-eta-box">
+                    <span>⏱️ Est. Wait Time: </span>
+                    <strong id="slip-eta">~3 Minutes</strong>
+                </div>
+
+                <div class="slip-details">
+                    <div><strong>Customer:</strong> <span id="slip-name">-</span></div>
+                    <div><strong>Phone:</strong> <span id="slip-phone">-</span></div>
+                    <div><strong>Service:</strong> <span id="slip-service">-</span></div>
+                    <div><strong>Queue Position:</strong> <span id="slip-position">#1</span></div>
+                    <div><strong>Date & Time:</strong> <span id="slip-time">-</span></div>
+                </div>
+
+                <!-- Dynamic QR Code -->
+                <div class="qr-section">
+                    <div id="slip-qrcode"></div>
+                    <div style="font-size: 10px; color: #64748b; margin-top: 4px;">
+                        📲 Scan with Phone to Track Turn in Waiting Lounge
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-buttons">
+                <button type="button" class="btn-secondary" onclick="window.print()">🖨️ Print Slip</button>
+                <button type="button" class="btn-primary" onclick="closeReceiptModal()">Done & View Dashboard</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Department Average Service Times (in minutes) for ETA Algorithm
+        const SERVICE_AVG_TIMES = {
+            'Deposit': 3,
+            'Withdrawal': 2,
+            'Account Services': 5,
+            'Loan': 10
+        };
+
+        const COUNTER_COUNTS = {
+            'Deposit': 2,
+            'Withdrawal': 2,
+            'Account Services': 1,
+            'Loan': 1
+        };
+
+        let voiceEnabled = true;
+        let lastAnnouncement = "Welcome to Central Bank. Please collect a token slip from the kiosk.";
+
+        // Initial Dataset
+        let tokensData = [
+            { id: "TKN-0001", name: "PersistTest1", phone: "111", service: "Deposit", priority: false, status: "Serving", issued: "2026-10-28 15:42:04", counter: 1 },
+            { id: "TKN-0002", name: "PersistTest2", phone: "222", service: "Withdrawal", priority: true, status: "Waiting", issued: "2026-10-28 15:42:04", counter: 0 },
+            { id: "TKN-0003", name: "PersistTest3", phone: "333", service: "Deposit", priority: false, status: "Waiting", issued: "2026-10-28 15:42:04", counter: 0 },
+            { id: "TKN-0004", name: "Deepak Verma", phone: "9911223344", service: "Withdrawal", priority: false, status: "Waiting", issued: "2026-10-28 15:42:30", counter: 0 },
+            { id: "TKN-0005", name: "Shanti Devi", phone: "9955443322", service: "Withdrawal", priority: true, status: "Served", issued: "2026-10-28 15:42:30", counter: 3 },
+            { id: "TKN-0006", name: "Hraj Singh", phone: "9812345678", service: "Deposit", priority: true, status: "Waiting", issued: "2026-10-28 22:18:32", counter: 0 }
+        ];
+
+        let countersData = [
+            { id: 1, name: "Counter 1", service: "Deposit", isBusy: true, token: "TKN-0001", customer: "PersistTest1" },
+            { id: 2, name: "Counter 2", service: "Deposit", isBusy: false, token: null, customer: null },
+            { id: 3, name: "Counter 3", service: "Withdrawal", isBusy: false, token: null, customer: null },
+            { id: 4, name: "Counter 4", service: "Withdrawal", isBusy: false, token: null, customer: null },
+            { id: 5, name: "Counter 5", service: "Account Services", isBusy: false, token: null, customer: null },
+            { id: 6, name: "Counter 6", service: "Loan", isBusy: false, token: null, customer: null },
+        ];
+
+        let nextTokenNumber = 7;
+
+        // Voice Synthesizer Audio Announcement
+        function playChimeAndSpeak(text) {
+            lastAnnouncement = text;
+            document.getElementById('live-announcement-text').textContent = text;
+
+            if (!voiceEnabled) return;
+
+            // Simple Web Audio API Synthesizer Ding-Dong Chime
+            try {
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(587.33, audioCtx.currentTime); // D5
+                osc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.15); // A5
+                gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.5);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.5);
+            } catch (e) {
+                console.log(e);
+            }
+
+            // Text to Speech
+            if ('speechSynthesis' in window) {
+                setTimeout(() => {
+                    window.speechSynthesis.cancel();
+                    const utterance = new SpeechSynthesisUtterance(text);
+                    utterance.rate = 0.95;
+                    utterance.pitch = 1.0;
+                    window.speechSynthesis.speak(utterance);
+                }, 300);
+            }
+        }
+
+        function toggleVoice() {
+            voiceEnabled = !voiceEnabled;
+            document.getElementById('voice-icon').textContent = voiceEnabled ? '🔊' : '🔇';
+            document.getElementById('voice-text').textContent = voiceEnabled ? 'Voice: ON' : 'Voice: MUTED';
+        }
+
+        function replayLastAnnouncement() {
+            playChimeAndSpeak(lastAnnouncement);
+        }
+
+        function updateKPIs() {
+            document.getElementById('kpi-issued').textContent = tokensData.length;
+            document.getElementById('kpi-waiting').textContent = tokensData.filter(t => t.status === 'Waiting').length;
+            document.getElementById('kpi-serving').textContent = tokensData.filter(t => t.status === 'Serving').length;
+            document.getElementById('kpi-served').textContent = tokensData.filter(t => t.status === 'Served').length;
+        }
+
+        function renderCounters() {
+            const container = document.getElementById('counters-container');
+            container.innerHTML = countersData.map(c => `
+                <div class="counter-box ${c.isBusy ? 'busy' : ''}">
+                    <div>
+                        <div class="counter-box-top">
+                            <span class="counter-number">${c.name}</span>
+                            <span class="counter-status ${c.isBusy ? 'busy' : 'free'}">${c.isBusy ? 'BUSY' : 'FREE'}</span>
+                        </div>
+                        <div class="counter-service">${c.service}</div>
+                        <div class="counter-details">
+                            ${c.isBusy 
+                                ? `<div class="counter-serving-token">Serving: ${c.token}</div><div style="font-size:12px;color:#94a3b8;margin-top:4px;">${c.customer || ''}</div>`
+                                : `<span style="font-size: 13px; color: var(--text-muted);">Ready for next customer</span>`
+                            }
+                        </div>
+                    </div>
+                    <div>
+                        ${c.isBusy 
+                            ? `<button class="counter-btn complete-btn" onclick="finishCounterService(${c.id})">✅ Complete Service</button>`
+                            : `<button class="counter-btn call-btn" onclick="callNextToken(${c.id})">📢 Call Next Customer</button>`
+                        }
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        let currentFilter = 'All';
+
+        function renderTable() {
+            const tbody = document.getElementById('tokens-tbody');
+            const searchVal = document.getElementById('search-box').value.toLowerCase();
+
+            const filtered = tokensData.filter(t => {
+                const matchesService = currentFilter === 'All' || t.service === currentFilter;
+                const matchesSearch = 
+                    t.id.toLowerCase().includes(searchVal) ||
+                    t.name.toLowerCase().includes(searchVal) ||
+                    t.phone.toLowerCase().includes(searchVal) ||
+                    t.status.toLowerCase().includes(searchVal);
+                return matchesService && matchesSearch;
+            });
+
+            tbody.innerHTML = filtered.map(t => `
+                <tr>
+                    <td><span class="token-badge">${t.id}</span></td>
+                    <td style="font-weight: 600; color: #fff;">${t.name}</td>
+                    <td>${t.phone}</td>
+                    <td>${t.service}</td>
+                    <td>${t.priority ? '<span class="priority-badge">⭐ PRIORITY</span>' : '<span style="color: var(--text-muted); font-size: 12px;">Standard</span>'}</td>
+                    <td><span class="status-pill ${t.status}">${t.status}</span></td>
+                    <td style="font-size: 12px; color: var(--text-muted);">${t.issued}</td>
+                </tr>
+            `).join('');
+        }
+
+        function filterService(service) {
+            currentFilter = service;
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                const text = btn.textContent.trim();
+                const expected = (service === 'Withdrawal' ? 'Withdraw' : service === 'Account Services' ? 'Account' : service);
+                btn.classList.toggle('active', text === expected);
+            });
+            renderTable();
+        }
+
+        function renderQueueHeads() {
+            const container = document.getElementById('queue-heads-list');
+            const services = ['Deposit', 'Withdrawal', 'Account Services', 'Loan'];
+            
+            container.innerHTML = services.map(s => {
+                const waitingTokens = tokensData.filter(t => t.service === s && t.status === 'Waiting');
+                const priorityTokens = waitingTokens.filter(t => t.priority);
+                const normalTokens = waitingTokens.filter(t => !t.priority);
+                const sortedQueue = [...priorityTokens, ...normalTokens];
+                const head = sortedQueue[0];
+
+                return `
+                    <div class="queue-item">
+                        <div class="queue-item-left">
+                            <span class="queue-pos">#1</span>
+                            <div>
+                                <div style="font-weight: 700; font-size: 14px; color: #fff;">${s}</div>
+                                <div style="font-size: 12px; color: var(--text-muted);">${waitingTokens.length} waiting</div>
+                            </div>
+                        </div>
+                        <div>
+                            ${head 
+                                ? `<span class="token-badge" style="font-size: 13px;">${head.id}</span> ${head.priority ? '<span class="priority-badge" style="font-size: 10px;">P</span>' : ''}`
+                                : `<span style="font-size: 12px; color: var(--text-muted);">Empty</span>`
+                            }
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Modal Functions
+        function openTokenModal() {
+            document.getElementById('token-modal').classList.add('active');
+            document.getElementById('input-name').focus();
+        }
+
+        function closeTokenModal() {
+            document.getElementById('token-modal').classList.remove('active');
+        }
+
+        function closeReceiptModal() {
+            document.getElementById('receipt-modal').classList.remove('active');
+        }
+
+        function handleTokenSubmit(e) {
+            e.preventDefault();
+
+            const name = document.getElementById('input-name').value.trim();
+            const phone = document.getElementById('input-phone').value.trim();
+            const service = document.getElementById('input-service').value;
+            const isPriority = document.getElementById('input-priority').checked;
+
+            if (!name || !phone) return;
+
+            const padNum = String(nextTokenNumber).padStart(4, '0');
+            const tokenId = `TKN-${padNum}`;
+            nextTokenNumber++;
+
+            const now = new Date();
+            const timestamp = now.toISOString().replace('T', ' ').substring(0, 19);
+
+            const newToken = {
+                id: tokenId,
+                name: name,
+                phone: phone,
+                service: service,
+                priority: isPriority,
+                status: "Waiting",
+                issued: timestamp,
+                counter: 0
+            };
+
+            tokensData.unshift(newToken);
+
+            // Estimated Wait Time (ETA) Calculation
+            const sameServiceWaiting = tokensData.filter(t => t.service === service && t.status === 'Waiting');
+            const pos = isPriority ? 1 : sameServiceWaiting.length;
+            const avgTime = SERVICE_AVG_TIMES[service] || 3;
+            const countersAvailable = COUNTER_COUNTS[service] || 1;
+            const estimatedMinutes = Math.max(1, Math.ceil((pos * avgTime) / countersAvailable));
+
+            // Update UI
+            updateKPIs();
+            renderTable();
+            renderQueueHeads();
+            closeTokenModal();
+
+            // Reset form
+            document.getElementById('token-form').reset();
+
+            // Populate and Show Receipt Slip Modal
+            document.getElementById('slip-token-id').textContent = tokenId;
+            document.getElementById('slip-name').textContent = name;
+            document.getElementById('slip-phone').textContent = phone;
+            document.getElementById('slip-service').textContent = service;
+            document.getElementById('slip-position').textContent = `#${pos} in line`;
+            document.getElementById('slip-time').textContent = timestamp;
+            document.getElementById('slip-eta').textContent = `~${estimatedMinutes} Minutes`;
+
+            const priorityTag = document.getElementById('slip-priority-container');
+            if (isPriority) {
+                priorityTag.innerHTML = `<span class="slip-priority-tag">⭐ SENIOR / PRIORITY CITIZEN</span>`;
+            } else {
+                priorityTag.innerHTML = ``;
+            }
+
+            // Generate Dynamic QR Code
+            const qrContainer = document.getElementById('slip-qrcode');
+            qrContainer.innerHTML = '';
+            if (typeof QRCode !== 'undefined') {
+                new QRCode(qrContainer, {
+                    text: `https://bank.token/verify?id=${tokenId}&cust=${encodeURIComponent(name)}&pos=${pos}`,
+                    width: 90,
+                    height: 90,
+                    colorDark: "#0284c7",
+                    colorLight: "#ffffff",
+                    correctLevel: QRCode.CorrectLevel.M
+                });
+            }
+
+            document.getElementById('receipt-modal').classList.add('active');
+
+            // Play voice notice
+            playChimeAndSpeak(`Token ${tokenId} generated for ${name}. Position ${pos}.`);
+        }
+
+        // Counter Operations
+        function callNextToken(counterId) {
+            const counter = countersData.find(c => c.id === counterId);
+            if (!counter || counter.isBusy) return;
+
+            const waitingForService = tokensData.filter(t => t.service === counter.service && t.status === 'Waiting');
+            if (waitingForService.length === 0) {
+                alert(`No customers waiting for ${counter.service}!`);
+                return;
+            }
+
+            // Priority customers first
+            const nextCustomer = waitingForService.find(t => t.priority) || waitingForService[0];
+
+            nextCustomer.status = 'Serving';
+            nextCustomer.counter = counterId;
+
+            counter.isBusy = true;
+            counter.token = nextCustomer.id;
+            counter.customer = `${nextCustomer.name} ${nextCustomer.priority ? '[P]' : ''}`;
+
+            updateKPIs();
+            renderCounters();
+            renderTable();
+            renderQueueHeads();
+
+            // Voice announcement
+            const announcement = `Token Number ${nextCustomer.id}, ${nextCustomer.name}, please proceed to Counter ${counterId} for ${counter.service}.`;
+            playChimeAndSpeak(announcement);
+        }
+
+        function finishCounterService(counterId) {
+            const counter = countersData.find(c => c.id === counterId);
+            if (!counter || !counter.isBusy) return;
+
+            const token = tokensData.find(t => t.id === counter.token);
+            if (token) {
+                token.status = 'Served';
+            }
+
+            const finishedToken = counter.token;
+            counter.isBusy = false;
+            counter.token = null;
+            counter.customer = null;
+
+            updateKPIs();
+            renderCounters();
+            renderTable();
+            renderQueueHeads();
+
+            playChimeAndSpeak(`Service completed for Token ${finishedToken}. Counter ${counterId} is now ready.`);
+        }
+
+        function exportCSV() {
+            let csv = "Token ID,Customer Name,Phone,Service Type,Priority,Status,Issued At\n";
+            tokensData.forEach(t => {
+                csv += `"${t.id}","${t.name}","${t.phone}","${t.service}","${t.priority ? 'Yes' : 'No'}","${t.status}","${t.issued}"\n`;
+            });
+
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement("a");
+            const url = URL.createObjectURL(blob);
+            link.setAttribute("href", url);
+            link.setAttribute("download", `bank_tokens_report_${new Date().toISOString().slice(0,10)}.csv`);
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        document.getElementById('search-box').addEventListener('input', renderTable);
+
+        // Initial Renders
+        updateKPIs();
+        renderCounters();
+        renderTable();
+        renderQueueHeads();
+    </script>
+</body>
+</html>
