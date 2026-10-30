@@ -255,3 +255,11 @@ Through the conception, design, implementation, and rigorous testing of this sys
 5. **Modern Development Workflow:** Utilized modular compilation, automated unit testing, script-based build pipelines, and documentation.
 
 The Bank Token Management System fulfills all technical and functional specifications required for a robust computing aptitude and C++ programming project.
+---
+
+### 8. Project Contributors & Academic Details
+
+* **Program:** Master of Computer Applications (MCA)
+* **Project Team:**
+  - **Prince Raj** ([@PrinceRaj-45](https://github.com/PrinceRaj-45)) - *Developer & Contributor*
+  - **Harsh Raj** ([@Mortal-harsh](https://github.com/Mortal-harsh)) - *Lead Developer*
