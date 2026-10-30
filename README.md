@@ -211,3 +211,10 @@ run_tests.bat
 ---
 
 *Built with C++ for Computing Aptitude Mini Project*
+---
+
+## 👥 Authors & Contributors
+
+- **Degree:** Master of Computer Applications (MCA)
+- **Prince Raj** ([@PrinceRaj-45](https://github.com/PrinceRaj-45)) - *Developer & Contributor*
+- **Harsh Raj** ([@Mortal-harsh](https://github.com/Mortal-harsh)) - *Lead Developer*
